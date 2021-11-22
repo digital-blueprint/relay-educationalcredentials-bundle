@@ -76,6 +76,47 @@ class Diploma
      */
     private $name;
 
+    /**
+     * @ApiProperty(iri="https://schema.org/credentialCategory")
+     * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
+     *
+     * @var string
+     */
+    private $credentialCategory;
+
+    /**
+     * @ApiProperty(iri="https://schema.org/educationalLevel")
+     * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
+     *
+     * @var string
+     */
+    private $educationalLevel;
+
+    /**
+     * @ApiProperty(iri="https://schema.org/creator")
+     * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
+     *
+     * @var string
+     */
+    private $creator;
+
+    /**
+     * @ApiProperty(iri="https://schema.org/validFrom")
+     * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
+     *
+     * @var string
+     */
+    private $validFrom;
+
+    /**
+     * @ApiProperty(iri="https://schema.org/educationalAlignment")
+     * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
+     *
+     * @var string
+     */
+    private $educationalAlignment;
+
+
     public function getName(): string
     {
         return $this->name;
@@ -94,5 +135,55 @@ class Diploma
     public function setIdentifier(string $identifier): void
     {
         $this->identifier = $identifier;
+    }
+
+    public function getCredentialCategory(): string
+    {
+        return $this->credentialCategory;
+    }
+
+    public function setCredentialCategory(string $credentialCategory): void
+    {
+        $this->credentialCategory = $credentialCategory;
+    }
+
+    public function getEducationalLevel(): string
+    {
+        return $this->educationalLevel;
+    }
+
+    public function setEducationalLevel(string $educationalLevel): void
+    {
+        $this->educationalLevel = $educationalLevel;
+    }
+
+    public function getCreator(): string
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(string $creator): void
+    {
+        $this->creator = $creator;
+    }
+
+    public function getValidFrom(): string
+    {
+        return $this->validFrom;
+    }
+
+    public function setValidFrom(string $validFrom): void
+    {
+        $this->validFrom = $validFrom;
+    }
+
+    public function getEducationalAlignment(): string
+    {
+        return $this->educationalAlignment;
+    }
+
+    public function setEducationalAlignment(string $educationalAlignment): void
+    {
+        $this->educationalAlignment = $educationalAlignment;
     }
 }
