@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EducationalcredentialsBundle\Tests\Service;
 
-use Dbp\Relay\EducationalcredentialsBundle\Service\ExternalApi;
 use Dbp\Relay\EducationalcredentialsBundle\Service\ConfigService;
+use Dbp\Relay\EducationalcredentialsBundle\Service\ExternalApi;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ExternalApiTest extends WebTestCase
