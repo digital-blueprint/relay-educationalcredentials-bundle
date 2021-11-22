@@ -47,6 +47,10 @@ content:
 dbp_relay_educationalcredentials:
   issuer: "did:ebsi:abc..."
   # issuer: '%env(VC_ISSUER)%'
+  urlIssuer: "http://localhost:13080/1.0/credentials/issue"
+  # urlIssuer: '%env(VC_URL_ISSUER)%'
+  urlVerifier: "http://localhost:14080/1.0/credentials/verify"
+  # urlIssuer: '%env(VC_URL_VERIFIER)%'
 ```
 
 The value gets read in `DbpRelayEducationalcredentialsExtension` and passed when creating the

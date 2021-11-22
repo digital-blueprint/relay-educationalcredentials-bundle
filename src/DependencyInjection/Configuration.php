@@ -16,6 +16,8 @@ class Configuration implements ConfigurationInterface
         $treeBuilder->getRootNode()
             ->children()
             ->scalarNode('issuer')->end()
+            ->scalarNode('urlIssuer')->end()
+            ->scalarNode('urlVerifier')->end()
             ->end()
             ->end();
 

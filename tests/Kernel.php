@@ -49,6 +49,8 @@ class Kernel extends BaseKernel
 
         $container->extension('dbp_relay_educationalcredentials', [
             'issuer' => 'did:ebsi:abc...',
+            'urlIssuer' => 'http://localhost:13080/1.0/credentials/issue',
+            'urlVerifier' => 'http://localhost:14080/1.0/credentials/verify',
         ]);
     }
 }

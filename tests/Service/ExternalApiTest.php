@@ -14,7 +14,11 @@ class ExternalApiTest extends WebTestCase
 
     protected function setUp(): void
     {
-        $service = new ConfigService('secret-test-custom');
+        $service = new ConfigService(
+            'did:ebsi:abc...',
+            'http://localhost:13080/1.0/credentials/issue',
+            'http://localhost:14080/1.0/credentials/verify'
+        );
         $this->api = new ExternalApi($service);
     }
 
