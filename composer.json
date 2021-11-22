@@ -21,12 +21,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Dbp\\Relay\\ducationalcredentialsBundle\\": "src/"
+            "Dbp\\Relay\\EducationalcredentialsBundle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Dbp\\Relay\\ducationalcredentialsBundle\\Tests\\": "tests/"
+            "Dbp\\Relay\\EducationalcredentialsBundle\\Tests\\": "tests/"
         }
     },
     "config": {

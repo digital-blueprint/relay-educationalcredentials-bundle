@@ -48,7 +48,7 @@ class Kernel extends BaseKernel
         ]);
 
         $container->extension('dbp_relay_educationalcredentials', [
-            'secret_token' => 'secret-test',
+            'issuer' => 'did:ebsi:abc...',
         ]);
     }
 }

@@ -24,7 +24,7 @@ class DbpRelayEducationalcredentialsExtension extends ConfigurableExtension
 
         // Inject the config value into the ConfigService service
         $definition = $container->getDefinition('Dbp\Relay\EducationalcredentialsBundle\Service\ConfigService');
-        $definition->addArgument($mergedConfig['secret_token']);
+        $definition->addArgument($mergedConfig['issuer']);
     }
 
     private function extendArrayParameter(ContainerBuilder $container, string $parameter, array $values)
