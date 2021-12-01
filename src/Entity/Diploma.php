@@ -49,7 +49,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             },
  *         }
  *     },
- *     iri="https://schema.org/Diploma",
+ *     iri="https://schema.org/EducationalOccupationalCredential",
  *     shortName="EducationalcredentialsDiploma",
  *     normalizationContext={
  *         "groups" = {"EducationalcredentialsDiploma:output"},
@@ -115,6 +115,14 @@ class Diploma
      * @var string
      */
     private $educationalAlignment;
+
+    /**
+     * @ApiProperty(iri="https://schema.org/text")
+     * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
+     *
+     * @var string
+     */
+    private $text = "";
 
 
     public function getName(): string
@@ -185,5 +193,15 @@ class Diploma
     public function setEducationalAlignment(string $educationalAlignment): void
     {
         $this->educationalAlignment = $educationalAlignment;
+    }
+
+    public function getText(): string
+    {
+        return $this->text;
+    }
+
+    public function setText(string $text): void
+    {
+        $this->text = $text;
     }
 }

@@ -6,8 +6,8 @@ namespace Dbp\Relay\EducationalcredentialsBundle\Service;
 
 class ConfigService
 {
-    private $issuer;
-    private $urlIssuer;
+    public $issuer;
+    public $urlIssuer;
     private $urlVerifier;
 
     public function __construct(string $issuer, string $urlIssuer, string $urlVerifier)
