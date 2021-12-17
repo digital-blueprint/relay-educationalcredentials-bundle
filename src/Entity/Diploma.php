@@ -6,6 +6,7 @@ namespace Dbp\Relay\EducationalcredentialsBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Dbp\Relay\EducationalcredentialsBundle\Controller\CreateEducationalCredentialAction;
 use Dbp\Relay\EducationalcredentialsBundle\Controller\LoggedInOnly;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -17,6 +18,29 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "openapi_context" = {
  *                 "tags" = {"Educational Credentials"},
  *             },
+ *         },
+ *         "post" = {
+ *             "path" = "/educationalcredentials/diplomas",
+ *             "method" = "POST",
+ *             "controller" = CreateEducationalCredentialAction::class,
+ *             "deserialize" = false,
+ *             "openapi_context" = {
+ *                 "tags" = {"Educational Credentials"},
+ *                 "requestBody" = {
+ *                     "content" = {
+ *                         "multipart/form-data" = {
+ *                             "schema" = {
+ *                                 "type" = "object",
+ *                                 "properties" = {
+ *                                     "did" = {"description" = "DID supplied by student", "type" = "string", "example" = "did:key:z6MkqyYXcBQZ5hZ9BFHBiVnmrZ1C1HCpesgZQoTdgjLdU6Ah"},
+ *                                     "id" = {"description" = "id of diploma (temp/intern)", "type" = "string", "example" = "0a9f591d-e553-4a4d-a958-e86ce0269d08"},
+ *                                 },
+ *                                 "required" = {"did", "id"},
+ *                             }
+ *                         }
+ *                     }
+ *                 }
+ *             }
  *         }
  *     },
  *     itemOperations={
@@ -122,8 +146,7 @@ class Diploma
      *
      * @var string
      */
-    private $text = "";
-
+    private $text = '';
 
     public function getName(): string
     {

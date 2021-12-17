@@ -6,9 +6,9 @@ namespace Dbp\Relay\EducationalcredentialsBundle\Service;
 
 use Dbp\Relay\EducationalcredentialsBundle\Entity\Diploma;
 use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\RequestOptions;
 
 class ExternalApi implements DiplomaProviderInterface
 {
@@ -29,7 +29,7 @@ class ExternalApi implements DiplomaProviderInterface
         $diploma1->setCreator('TU Graz');
         $diploma1->setValidFrom('2021-03-18T00:00:00.000Z');
         $diploma1->setEducationalAlignment('ISCED/481');
-        $diploma1->setText("");
+        $diploma1->setText('');
 
         $diploma2 = new Diploma();
         $diploma2->setIdentifier('8d619927-28b7-4970-9e5a-c4a47d8e9ad1');
@@ -39,7 +39,7 @@ class ExternalApi implements DiplomaProviderInterface
         $diploma2->setCreator('TU Graz');
         $diploma2->setValidFrom('2029-09-04T00:00:00.000Z');
         $diploma2->setEducationalAlignment('ISCED/480');
-        $diploma2->setText("");
+        $diploma2->setText('');
 
         $this->diplomas[] = $diploma1;
         $this->diplomas[] = $diploma2;
@@ -49,7 +49,6 @@ class ExternalApi implements DiplomaProviderInterface
     {
         foreach ($this->diplomas as &$diploma) {
             if ($diploma->getIdentifier() === $identifier) {
-                $diploma->setText($this->getVerifiableCredential($diploma));
                 return $diploma;
             }
         }
@@ -62,7 +61,15 @@ class ExternalApi implements DiplomaProviderInterface
         return $this->diplomas;
     }
 
-    private function getVerifiableCredential(Diploma $diploma) {
+    /**
+     * @param Diploma $diploma
+     * @param string $did
+     *
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getVerifiableCredential(Diploma $diploma, string $did): string
+    {
         /*
          {
             "credential": {
@@ -91,27 +98,27 @@ class ExternalApi implements DiplomaProviderInterface
          */
         $obj = new \stdClass();
         $obj->credential = new \stdClass();
-        $obj->credential->{"@context"} = [
-            "https://www.w3.org/2018/credentials/v1",
-            "https://essif.europa.eu/schemas/vc/2020/v1"
+        $obj->credential->{'@context'} = [
+            'https://www.w3.org/2018/credentials/v1',
+            'https://essif.europa.eu/schemas/vc/2020/v1',
         ];
         $obj->credential->type = [
-            "VerifiableCredential",
-            "VerifiableAttestation",
-            "DiplomaCredential"
+            'VerifiableCredential',
+            'VerifiableAttestation',
+            'DiplomaCredential',
         ];
         $obj->credential->issuer = $this->service->issuer;
         $obj->credential->credentialSubject = new \stdClass();
-        $obj->credential->credentialSubject->type = "Student";
-        $obj->credential->credentialSubject->id = "did:key:z6MkqyYXcBQZ5hZ9BFHBiVnmrZ1C1HCpesgZQoTdgjLdU6Ah";
+        $obj->credential->credentialSubject->type = 'Student';
+        $obj->credential->credentialSubject->id = $did;
         $obj->credential->credentialSubject->studyProgram = $diploma->getName();
-        $obj->credential->credentialSubject->learningAchievement = "Master of Science";
+        $obj->credential->credentialSubject->learningAchievement = 'Master of Science';
         $obj->credential->credentialSubject->dateOfAchievement = $diploma->getValidFrom();
-        $obj->credential->credentialSubject->eqfLevel = "http://data.europa.eu/snb/eqf/7"; //$diploma->getEducationalAlignment(); // "ISCED/433";
-        $obj->credential->credentialSubject->targetFrameworkName = "European Qualifications Framework for lifelong learning - (2008/C 111/01)";
+        $obj->credential->credentialSubject->eqfLevel = 'http://data.europa.eu/snb/eqf/7'; //$diploma->getEducationalAlignment(); // "ISCED/433";
+        $obj->credential->credentialSubject->targetFrameworkName = 'European Qualifications Framework for lifelong learning - (2008/C 111/01)';
 
         $obj->options = new \stdClass();
-        $obj->options->format = "jsonldjwt";
+        $obj->options->format = 'jsonldjwt';
 
         $stack = HandlerStack::create();
         $client_options = [
@@ -129,8 +136,7 @@ class ExternalApi implements DiplomaProviderInterface
         } catch (RequestException $e) {
             throw new \Exception($e->getMessage());
         }
-        $data = $response->getBody()->getContents();
 
-        return $data;
+        return $response->getBody()->getContents();
     }
 }
