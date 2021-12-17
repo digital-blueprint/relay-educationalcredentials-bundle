@@ -62,16 +62,18 @@ class ExternalApi implements DiplomaProviderInterface
     }
 
     /**
-     * @param Diploma $diploma
-     * @param string $did
-     *
-     * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getVerifiableCredential(Diploma $diploma, string $did): string
     {
+        $user = new \stdClass();
+        $user->fistname = 'Eva';
+        $user->lastname = 'Musterfrau';
+        $user->dateOfBirth = '1999-10-22T00:00:00.000Z';
+        $user->immatriculationNumber = '0000000';
         /*
-         {
+        old format:
+        {
             "credential": {
                 "@context": [
                     "https://www.w3.org/2018/credentials/v1",
@@ -94,11 +96,50 @@ class ExternalApi implements DiplomaProviderInterface
                 }
             },
             "options": {"format": "jsonldjwt"}
-         }
-         */
+        }
+        new format:
+        {
+            "@context": [
+                "https://www.w3.org/2018/credentials/v1",
+                "https://danubetech.github.io/ebsi4austria-examples/context/essif-schemas-vc-2020-v1.jsonld",
+                "https://www.w3.org/ns/did/v1"
+            ],
+            "type": [
+                "VerifiableCredential",
+                "VerifiableAttestation",
+                "DiplomaCredential"
+            ],
+            "issuer":"did:ebsi:z23EQVGi5so9sBwytv6nMXMo",
+            "issuanceDate":"2021-12-07T14:48:12Z",
+            "credentialSubject": {
+                "type":"Student",
+                "id":"did:ebsi:zqpZej3RbScW9feAjwipKn4",
+                "studyProgram":"Master Studies in Strategy, Innovation, and Management Control",
+                "immatriculationNumber":"00000000",
+                "currentGivenName":"Eva",
+                "currentFamilyName":"Musterfrau",
+                "learningAchievement":"Master's Degree",
+                "dateOfBirth":"1999-10-22T00:00:00.000Z",
+                "dateOfAchievement":"2021-01-04T00:00:00.000Z",
+                "overallEvaluation":"passed with honors",
+                "eqfLevel":"http://data.europa.eu/snb/eqf/7",
+                "targetFrameworkName":"European Qualifications Framework for lifelong learning - (2008/C 111/01)"},
+                "proof": {
+                    "type":"EcdsaSecp256k1Signature2019",
+                    "created":"2021-12-07T14:48:12Z",
+                    "proofPurpose":"assertionMethod",
+                    "verificationMethod":"did:ebsi:z23EQVGi5so9sBwytv6nMXMo#keys-1",
+                    "jws":"eyJiNjQiOmZhbHNlLCJjcml0IjpbImI2NCJdLCJhbGciOiJFUzI1NksifQ..RDoJ76LMvKNzPiIEdlFF41DzU_mbY_juQEyGX-NgZe4Q2Cf5AT9wztvr4qk8CNZxc5FxN3v0_Gcqvjtm5hnDNw"
+                }
+            }
+        }
+        */
         $obj = new \stdClass();
         $obj->credential = new \stdClass();
         $obj->credential->{'@context'} = [
+//            'https://www.w3.org/2018/credentials/v1',
+//            'https://danubetech.github.io/ebsi4austria-examples/context/essif-schemas-vc-2020-v1.jsonld',
+//            'https://www.w3.org/ns/did/v1',
             'https://www.w3.org/2018/credentials/v1',
             'https://essif.europa.eu/schemas/vc/2020/v1',
         ];
@@ -108,12 +149,18 @@ class ExternalApi implements DiplomaProviderInterface
             'DiplomaCredential',
         ];
         $obj->credential->issuer = $this->service->issuer;
+//        $obj->credential->issuanceDate = date('Y-m-d\TH:i:s\Z'); //server need to be set to UTC
         $obj->credential->credentialSubject = new \stdClass();
         $obj->credential->credentialSubject->type = 'Student';
         $obj->credential->credentialSubject->id = $did;
         $obj->credential->credentialSubject->studyProgram = $diploma->getName();
-        $obj->credential->credentialSubject->learningAchievement = 'Master of Science';
+        $obj->credential->credentialSubject->learningAchievement = $diploma->getEducationalLevel();
         $obj->credential->credentialSubject->dateOfAchievement = $diploma->getValidFrom();
+//        $obj->credential->credentialSubject->immatriculationNumber = $user->immatriculationNumber;
+//        $obj->credential->credentialSubject->currentGivenName = $user->fistname;
+//        $obj->credential->credentialSubject->currentFamilyName = $user->lastname;
+//        $obj->credential->credentialSubject->dateOfBirth = $user->dateOfBirth;
+//        $obj->credential->credentialSubject->overallEvaluation = 'passed with honors';
         $obj->credential->credentialSubject->eqfLevel = 'http://data.europa.eu/snb/eqf/7'; //$diploma->getEducationalAlignment(); // "ISCED/433";
         $obj->credential->credentialSubject->targetFrameworkName = 'European Qualifications Framework for lifelong learning - (2008/C 111/01)';
 

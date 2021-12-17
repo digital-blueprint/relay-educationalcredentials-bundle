@@ -14,12 +14,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     collectionOperations={
  *         "get" = {
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *             "path" = "/educationalcredentials/diplomas",
  *             "openapi_context" = {
  *                 "tags" = {"Educational Credentials"},
  *             },
  *         },
  *         "post" = {
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *             "path" = "/educationalcredentials/diplomas",
  *             "method" = "POST",
  *             "controller" = CreateEducationalCredentialAction::class,
@@ -45,33 +47,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *         "get" = {
- *             "path" = "/educationalcredentials/diplomas/{identifier}",
- *             "openapi_context" = {
- *                 "tags" = {"Educational Credentials"},
- *             },
- *         },
- *         "put" = {
- *             "path" = "/educationalcredentials/diplomas/{identifier}",
- *             "openapi_context" = {
- *                 "tags" = {"Educational Credentials"},
- *             },
- *         },
- *         "delete" = {
- *             "path" = "/educationalcredentials/diplomas/{identifier}",
- *             "openapi_context" = {
- *                 "tags" = {"Educational Credentials"},
- *             },
- *         },
- *         "loggedin_only" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
- *             "method" = "GET",
- *             "path" = "/educationalcredentials/diplomas/{identifier}/loggedin-only",
- *             "controller" = LoggedInOnly::class,
+ *             "path" = "/educationalcredentials/diplomas/{identifier}",
  *             "openapi_context" = {
- *                 "summary" = "Only works when logged in.",
  *                 "tags" = {"Educational Credentials"},
  *             },
- *         }
+ *         },
  *     },
  *     iri="https://schema.org/EducationalOccupationalCredential",
  *     shortName="EducationalcredentialsDiploma",
