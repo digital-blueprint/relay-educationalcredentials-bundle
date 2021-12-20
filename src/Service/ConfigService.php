@@ -8,7 +8,7 @@ class ConfigService
 {
     public $issuer;
     public $urlIssuer;
-    private $urlVerifier;
+    public $urlVerifier;
 
     public function __construct(string $issuer, string $urlIssuer, string $urlVerifier)
     {

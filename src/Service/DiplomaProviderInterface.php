@@ -11,4 +11,7 @@ interface DiplomaProviderInterface
     public function getDiplomaById(string $identifier): ?Diploma;
 
     public function getDiplomas(): array;
+
+    public function getVerifiableCredential(Diploma $diploma, string $did): string;
+    public function verifyVerifiableCredential($text): ?Diploma;
 }

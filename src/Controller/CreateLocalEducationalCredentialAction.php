@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-final class CreateEducationalCredentialAction extends AbstractController
+final class CreateLocalEducationalCredentialAction extends AbstractController
 {
     protected $api;
 
@@ -22,12 +22,16 @@ final class CreateEducationalCredentialAction extends AbstractController
     /**
      * @throws HttpException
      */
-    public function __invoke(Request $request): ?Diploma
+    public function __invoke(string $identifier, Request $request): ?Diploma
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $text = $request->get('text', '');
+        $did = $request->get('did', '');
 
-        $diploma = $this->api->verifyVerifiableCredential($text);
+        $diploma = $this->api->getDiplomaById($identifier);
+        if ($diploma !== null) {
+            $vc = $this->api->getVerifiableCredential($diploma, $did);
+            $diploma->setText($vc ?? 'N/A');
+        }
 
         return $diploma;
     }

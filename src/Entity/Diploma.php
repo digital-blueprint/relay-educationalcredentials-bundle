@@ -7,7 +7,7 @@ namespace Dbp\Relay\EducationalcredentialsBundle\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Dbp\Relay\EducationalcredentialsBundle\Controller\CreateEducationalCredentialAction;
-use Dbp\Relay\EducationalcredentialsBundle\Controller\LoggedInOnly;
+use Dbp\Relay\EducationalcredentialsBundle\Controller\CreateLocalEducationalCredentialAction;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -18,6 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "path" = "/educationalcredentials/diplomas",
  *             "openapi_context" = {
  *                 "tags" = {"Educational Credentials"},
+ *                 "summary" = "Get all available diploma from local data.",
  *             },
  *         },
  *         "post" = {
@@ -28,16 +29,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "deserialize" = false,
  *             "openapi_context" = {
  *                 "tags" = {"Educational Credentials"},
+ *                 "summary" = "Create a diploma from remote data (VC).",
  *                 "requestBody" = {
  *                     "content" = {
  *                         "multipart/form-data" = {
  *                             "schema" = {
  *                                 "type" = "object",
  *                                 "properties" = {
- *                                     "did" = {"description" = "DID supplied by student", "type" = "string", "example" = "did:key:z6MkqyYXcBQZ5hZ9BFHBiVnmrZ1C1HCpesgZQoTdgjLdU6Ah"},
- *                                     "id" = {"description" = "id of diploma (temp/intern)", "type" = "string", "example" = "0a9f591d-e553-4a4d-a958-e86ce0269d08"},
+ *                                     "text" = {"description" = "VC supplied by student", "type" = "string", "example" = ""},
  *                                 },
- *                                 "required" = {"did", "id"},
+ *                                 "required" = {"text"},
  *                             }
  *                         }
  *                     }
@@ -51,6 +52,36 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "path" = "/educationalcredentials/diplomas/{identifier}",
  *             "openapi_context" = {
  *                 "tags" = {"Educational Credentials"},
+ *                 "summary" = "Get a diploma from local data.",
+ *                 "parameters" = {
+ *                     {"name" = "identifier", "in" = "path", "description" = "Id of diploma", "required" = true, "type" = "string", "example" = "0a9f591d-e553-4a4d-a958-e86ce0269d08"},
+ *                 }
+ *             },
+ *         },
+ *         "post_create_vc" = {
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
+ *             "method" = "POST",
+ *             "path" = "/educationalcredentials/diplomas/{identifier}/verifiable",
+ *             "controller" = CreateLocalEducationalCredentialAction::class,
+ *             "openapi_context" = {
+ *                 "tags" = {"Educational Credentials"},
+ *                 "summary" = "Create a Educational Credential from local data.",
+ *                 "requestBody" = {
+ *                     "content" = {
+ *                         "application/json" = {
+ *                             "schema" = {
+ *                                 "type" = "object",
+ *                                 "properties" = {
+ *                                     "did" = {"description" = "DID supplied by student", "type" = "string", "example" = "did:key:z6MkqyYXcBQZ5hZ9BFHBiVnmrZ1C1HCpesgZQoTdgjLdU6Ah"},
+ *                                 },
+ *                                 "required" = {"did"},
+ *                             },
+ *                         }
+ *                     }
+ *                 },
+ *                 "parameters" = {
+ *                     {"name" = "identifier", "in" = "path", "description" = "Id of diploma", "required" = true, "type" = "string", "example" = "0a9f591d-e553-4a4d-a958-e86ce0269d08"},
+ *                 }
  *             },
  *         },
  *     },

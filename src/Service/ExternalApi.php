@@ -158,4 +158,104 @@ class ExternalApi implements DiplomaProviderInterface
 
         return $response->getBody()->getContents();
     }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \JsonException
+     */
+    public function verifyVerifiableCredential($text): ?Diploma
+    {
+        /*
+        {
+            "verifiableCredential": {
+                "vc": "eyJraWQiOiJkaWQ6ZWJzaTp6dW9TNlZmbm1OTGR1RjJkeW5oc2pCVSNrZXlzLTEiLCJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJzdWIiOiJkaWQ6a2V5Ono2TWtxeVlYY0JRWjVoWjlCRkhCaVZubXJaMUMxSENwZXNnWlFvVGRnakxkVTZBaCIsIm5iZiI6MTYzOTk4NzczNywiaXNzIjoiZGlkOmVic2k6enVvUzZWZm5tTkxkdUYyZHluaHNqQlUiLCJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSIsImh0dHBzOi8vZGFudWJldGVjaC5naXRodWIuaW8vZWJzaTRhdXN0cmlhLWV4YW1wbGVzL2NvbnRleHQvZXNzaWYtc2NoZW1hcy12Yy0yMDIwLXYxLmpzb25sZCJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiVmVyaWZpYWJsZUF0dGVzdGF0aW9uIiwiRGlwbG9tYUNyZWRlbnRpYWwiXSwiY3JlZGVudGlhbFN1YmplY3QiOnsidHlwZSI6IlN0dWRlbnQiLCJzdHVkeVByb2dyYW0iOiJNYXN0ZXIgU3R1ZGllcyBpbiBDb21wdXRlciBTY2llbmNlIiwibGVhcm5pbmdBY2hpZXZlbWVudCI6Ik1hc3RlciBvZiBTY2llbmNlIiwiZGF0ZU9mQWNoaWV2ZW1lbnQiOiIyMDIxLTAzLTE4VDAwOjAwOjAwLjAwMFoiLCJpbW1hdHJpY3VsYXRpb25OdW1iZXIiOiIwMDAwMDAwIiwiY3VycmVudEdpdmVuTmFtZSI6IkV2YSIsImN1cnJlbnRGYW1pbHlOYW1lIjoiTXVzdGVyZnJhdSIsImRhdGVPZkJpcnRoIjoiMTk5OS0xMC0yMlQwMDowMDowMC4wMDBaIiwib3ZlcmFsbEV2YWx1YXRpb24iOiJwYXNzZWQgd2l0aCBob25vcnMiLCJlcWZMZXZlbCI6Imh0dHA6Ly9kYXRhLmV1cm9wYS5ldS9zbmIvZXFmLzciLCJ0YXJnZXRGcmFtZXdvcmtOYW1lIjoiRXVyb3BlYW4gUXVhbGlmaWNhdGlvbnMgRnJhbWV3b3JrIGZvciBsaWZlbG9uZyBsZWFybmluZyAtICgyMDA4L0MgMTExLzAxKSJ9fX0.TkhjBahkm2azVYkgJ2Lk998oUZBYvdk8rziogBNc4M9NTp9c9yq77DBRb3PIqsTYL-ukKRsD3fK40b1Q9ukVJg"
+            },
+            "options": {}
+        }
+        */
+        $obj = new \stdClass();
+        $obj->verifiableCredential = new \stdClass();
+        $obj->verifiableCredential->vc = $text;
+        $obj->options = new \stdClass();
+
+        $stack = HandlerStack::create();
+        $client_options = [
+            'handler' => $stack,
+        ];
+//        if ($this->logger !== null) {
+//            $stack->push(Tools::createLoggerMiddleware($this->logger));
+//        }
+
+        // verification does not work in the docker container, at the moment, so skip it
+        // -----------------------------------------------------------------------------
+//        $client = new Client($client_options);
+//
+//        try {
+//            $response = $client->post($this->service->urlVerifier, [
+//                RequestOptions::JSON => $obj,
+//            ]);
+//        } catch (RequestException $e) {
+//            throw new \Exception($e->getMessage());
+//        }
+//        //dump($response->getBody()->getContents());
+
+        $json = json_decode(
+            base64_decode(str_replace(['_', '-'], ['/', '+'], explode('.', $text)[1]), true),
+            false,
+            512,
+            JSON_THROW_ON_ERROR
+        );
+        dump($json);
+
+        /*
+        {
+          "sub": "did:key:z6MkqyYXcBQZ5hZ9BFHBiVnmrZ1C1HCpesgZQoTdgjLdU6Ah",
+          "nbf": 1639987737,
+          "iss": "did:ebsi:zuoS6VfnmNLduF2dynhsjBU",
+          "vc": {
+            "@context": [
+              "https://www.w3.org/2018/credentials/v1",
+              "https://danubetech.github.io/ebsi4austria-examples/context/essif-schemas-vc-2020-v1.jsonld"
+            ],
+            "type": [
+              "VerifiableCredential",
+              "VerifiableAttestation",
+              "DiplomaCredential"
+            ],
+            "credentialSubject": {
+              "type": "Student",
+              "studyProgram": "Master Studies in Computer Science",
+              "learningAchievement": "Master of Science",
+              "dateOfAchievement": "2021-03-18T00:00:00.000Z",
+              "immatriculationNumber": "0000000",
+              "currentGivenName": "Eva",
+              "currentFamilyName": "Musterfrau",
+              "dateOfBirth": "1999-10-22T00:00:00.000Z",
+              "overallEvaluation": "passed with honors",
+              "eqfLevel": "http://data.europa.eu/snb/eqf/7",
+              "targetFrameworkName": "European Qualifications Framework for lifelong learning - (2008/C 111/01)"
+            }
+          }
+        }
+        */
+        if (strpos($json->vc->credentialSubject->learningAchievement, 'Master') !== false) {
+            $learningAchievement = 'Master';
+        } elseif (strpos($json->vc->credentialSubject->learningAchievement, 'Bachelor') !== false) {
+            $learningAchievement = 'Bachelor';
+        } else {
+            $learningAchievement = 'unknown';
+        }
+
+        $diploma = new Diploma();
+        $diploma->setIdentifier(uniqid('', true));
+        $diploma->setName($json->vc->credentialSubject->studyProgram);
+        $diploma->setCredentialCategory('degree');
+        $diploma->setEducationalLevel($learningAchievement);
+        $diploma->setCreator($json->iss);
+        $diploma->setValidFrom($json->vc->credentialSubject->dateOfAchievement);
+        $diploma->setEducationalAlignment('ISCED/480');
+        $diploma->setText($text);
+
+        return $diploma;
+    }
 }
