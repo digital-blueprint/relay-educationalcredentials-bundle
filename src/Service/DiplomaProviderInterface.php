@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Dbp\Relay\EducationalcredentialsBundle\Service;
 
 use Dbp\Relay\EducationalcredentialsBundle\Entity\Diploma;
+use Psr\Log\LoggerAwareInterface;
 
-interface DiplomaProviderInterface
+interface DiplomaProviderInterface extends LoggerAwareInterface
 {
     public function getDiplomaById(string $identifier): ?Diploma;
 

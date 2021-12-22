@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EducationalcredentialsBundle\Controller;
 
+use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EducationalcredentialsBundle\Entity\Diploma;
 use Dbp\Relay\EducationalcredentialsBundle\Service\DiplomaProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 final class CreateLocalEducationalCredentialAction extends AbstractController
@@ -22,16 +24,17 @@ final class CreateLocalEducationalCredentialAction extends AbstractController
     /**
      * @throws HttpException
      */
-    public function __invoke(string $identifier, Request $request): ?Diploma
+    public function __invoke(string $identifier, Request $request): Diploma
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $did = $request->get('did', '');
 
         $diploma = $this->api->getDiplomaById($identifier);
-        if ($diploma !== null) {
-            $vc = $this->api->getVerifiableCredential($diploma, $did);
-            $diploma->setText($vc ?? 'N/A');
+        if ($diploma === null) {
+            throw new ApiError(Response::HTTP_BAD_REQUEST);
         }
+        $vc = $this->api->getVerifiableCredential($diploma, $did);
+        $diploma->setText($vc ?? 'N/A');
 
         return $diploma;
     }

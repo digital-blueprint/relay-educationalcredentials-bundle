@@ -156,7 +156,7 @@ class Diploma
      * @ApiProperty(iri="https://schema.org/text")
      * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
      *
-     * @var string
+     * @var ?string
      */
     private $text = '';
 
@@ -230,12 +230,12 @@ class Diploma
         $this->educationalAlignment = $educationalAlignment;
     }
 
-    public function getText(): string
+    public function getText(): ?string
     {
         return $this->text;
     }
 
-    public function setText(string $text): void
+    public function setText(?string $text): void
     {
         $this->text = $text;
     }
