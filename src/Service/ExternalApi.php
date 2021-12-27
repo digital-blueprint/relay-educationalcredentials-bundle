@@ -44,7 +44,7 @@ class ExternalApi implements DiplomaProviderInterface
         $diploma2->setCredentialCategory('degree');
         $diploma2->setEducationalLevel('Bachelor');
         $diploma2->setCreator('TU Graz');
-        $diploma2->setValidFrom('2029-09-04T00:00:00.000Z');
+        $diploma2->setValidFrom('2019-09-04T00:00:00.000Z');
         $diploma2->setEducationalAlignment('ISCED/480');
         $diploma2->setText('');
 
