@@ -31,10 +31,13 @@ final class CreateLocalEducationalCredentialAction extends AbstractController
 
         $diploma = $this->api->getDiplomaById($identifier);
         if ($diploma === null) {
-            throw new ApiError(Response::HTTP_BAD_REQUEST);
+            throw new ApiError(Response::HTTP_BAD_REQUEST, 'requested diploma id unknown');
         }
         $vc = $this->api->getVerifiableCredential($diploma, $did);
-        $diploma->setText($vc ?? 'N/A');
+        if (!$vc) {
+            throw new ApiError(Response::HTTP_BAD_REQUEST, 'unable to create verifiable crendential');
+        }
+        $diploma->setText($vc);
 
         return $diploma;
     }

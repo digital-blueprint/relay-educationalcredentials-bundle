@@ -31,7 +31,7 @@ final class CreateEducationalCredentialAction extends AbstractController
 
         $diploma = $this->api->verifyVerifiableCredential($text);
         if ($diploma === null) {
-            throw new ApiError(Response::HTTP_BAD_REQUEST);
+            throw new ApiError(Response::HTTP_BAD_REQUEST, 'unable to verify given credential');
         }
 
         return $diploma;
