@@ -27,8 +27,9 @@ final class CreateLocalEducationalCredentialAction extends AbstractController
     public function __invoke(string $identifier, Request $request): Diploma
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $did = $request->get('did', '');
-
+        $body = json_decode($request->getContent(), false, 32);
+        $did = $body->did;
+        //dump("got did = '$did'");
         $diploma = $this->api->getDiplomaById($identifier);
         if ($diploma === null) {
             throw new ApiError(Response::HTTP_BAD_REQUEST, 'requested diploma id unknown');
