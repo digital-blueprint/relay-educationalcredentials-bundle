@@ -136,12 +136,15 @@ class ExternalApi implements DiplomaProviderInterface
         $obj->credential->credentialSubject->currentGivenName = $person->getGivenName();
         $obj->credential->credentialSubject->currentFamilyName = $person->getFamilyName();
         $obj->credential->credentialSubject->dateOfBirth = date('Y-m-d\TH:i:s\Z', strtotime($person->getBirthDate()));
-        $obj->credential->credentialSubject->overallEvaluation = 'passed with honors';
+        //$obj->credential->credentialSubject->overallEvaluation = 'passed with honors';
         $obj->credential->credentialSubject->eqfLevel = 'http://data.europa.eu/snb/eqf/7'; //$diploma->getEducationalAlignment(); // "ISCED/433";
         $obj->credential->credentialSubject->targetFrameworkName = 'European Qualifications Framework for lifelong learning - (2008/C 111/01)';
 
         $obj->options = new \stdClass();
-        $obj->options->format = 'jsonldjwt';
+        //$obj->options->format = 'jsonldjwt';
+        //$obj->options->returnMetadata = true;
+        $obj->options->credentialFormatOptions = new \stdClass();
+        $obj->options->credentialFormatOptions->documentLoaderEnableHttps = true;
 
         $stack = HandlerStack::create();
         $client_options = [
@@ -255,6 +258,7 @@ class ExternalApi implements DiplomaProviderInterface
                 ],
                 "credentialSubject": {
                   "type": "Student",
+                  "id": "did:ebsi:zqpZej3RbScW9feAjwipKn4",
                   "studyProgram": "Master Studies in Computer Science",
                   "learningAchievement": "Master of Science",
                   "dateOfAchievement": "2021-03-18T00:00:00.000Z",
