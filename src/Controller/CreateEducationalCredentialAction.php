@@ -10,6 +10,7 @@ use Dbp\Relay\EducationalcredentialsBundle\Service\DiplomaProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 final class CreateEducationalCredentialAction extends AbstractController
@@ -27,7 +28,12 @@ final class CreateEducationalCredentialAction extends AbstractController
     public function __invoke(Request $request): Diploma
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $text = $request->get('text', '');
+//        $text = $request->get('text', '');
+//        dump($text);
+        $text = $request->get('text');
+        if ($text === null) {
+            throw new BadRequestHttpException('Missing "text"');
+        }
 
         $diploma = $this->api->verifyVerifiableCredential($text);
         if ($diploma === null) {

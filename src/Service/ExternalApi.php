@@ -182,15 +182,24 @@ class ExternalApi implements DiplomaProviderInterface
                 "vc": "eyJraWQiOiJkaWQ6ZWJzaTp6dW9TNlZmbm1OTGR1RjJkeW5oc2pCVSNrZXlzLTEiLCJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJzdWIiOiJkaWQ6a2V5Ono2TWtxeVlYY0JRWjVoWjlCRkhCaVZubXJaMUMxSENwZXNnWlFvVGRnakxkVTZBaCIsIm5iZiI6MTYzOTk4NzczNywiaXNzIjoiZGlkOmVic2k6enVvUzZWZm5tTkxkdUYyZHluaHNqQlUiLCJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSIsImh0dHBzOi8vZGFudWJldGVjaC5naXRodWIuaW8vZWJzaTRhdXN0cmlhLWV4YW1wbGVzL2NvbnRleHQvZXNzaWYtc2NoZW1hcy12Yy0yMDIwLXYxLmpzb25sZCJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiVmVyaWZpYWJsZUF0dGVzdGF0aW9uIiwiRGlwbG9tYUNyZWRlbnRpYWwiXSwiY3JlZGVudGlhbFN1YmplY3QiOnsidHlwZSI6IlN0dWRlbnQiLCJzdHVkeVByb2dyYW0iOiJNYXN0ZXIgU3R1ZGllcyBpbiBDb21wdXRlciBTY2llbmNlIiwibGVhcm5pbmdBY2hpZXZlbWVudCI6Ik1hc3RlciBvZiBTY2llbmNlIiwiZGF0ZU9mQWNoaWV2ZW1lbnQiOiIyMDIxLTAzLTE4VDAwOjAwOjAwLjAwMFoiLCJpbW1hdHJpY3VsYXRpb25OdW1iZXIiOiIwMDAwMDAwIiwiY3VycmVudEdpdmVuTmFtZSI6IkV2YSIsImN1cnJlbnRGYW1pbHlOYW1lIjoiTXVzdGVyZnJhdSIsImRhdGVPZkJpcnRoIjoiMTk5OS0xMC0yMlQwMDowMDowMC4wMDBaIiwib3ZlcmFsbEV2YWx1YXRpb24iOiJwYXNzZWQgd2l0aCBob25vcnMiLCJlcWZMZXZlbCI6Imh0dHA6Ly9kYXRhLmV1cm9wYS5ldS9zbmIvZXFmLzciLCJ0YXJnZXRGcmFtZXdvcmtOYW1lIjoiRXVyb3BlYW4gUXVhbGlmaWNhdGlvbnMgRnJhbWV3b3JrIGZvciBsaWZlbG9uZyBsZWFybmluZyAtICgyMDA4L0MgMTExLzAxKSJ9fX0.TkhjBahkm2azVYkgJ2Lk998oUZBYvdk8rziogBNc4M9NTp9c9yq77DBRb3PIqsTYL-ukKRsD3fK40b1Q9ukVJg"
             },
             "options": {
-                    "returnMetadata": true   // not jet in W3C standard :-(
+                "returnMetadata": true,   // not jet in W3C standard :-(
+                "credentialFormatOptions": {
+                    "documentLoaderEnableHttps": true
+                }
             }
         }
         */
         $obj = new \stdClass();
-        $obj->verifiableCredential = new \stdClass();
-        $obj->verifiableCredential->vc = $text;
+        // JWT
+//        $obj->verifiableCredential = new \stdClass();
+//        $obj->verifiableCredential->vc = $text;
+        // proof
+        $obj->verifiableCredential = json_decode($text);
         $obj->options = new \stdClass();
         $obj->options->returnMetadata = true;
+        $obj->options->credentialFormatOptions = new \stdClass();
+        $obj->options->credentialFormatOptions->documentLoaderEnableHttps = true;
+        dump($obj);
 
         $stack = HandlerStack::create();
         $client_options = [
@@ -227,19 +236,20 @@ class ExternalApi implements DiplomaProviderInterface
 
         if ($ok) {
             $json = json_decode(
-                base64_decode(str_replace(['_', '-'], ['/', '+'], explode('.', $text)[1]), true),
+            //base64_decode(str_replace(['_', '-'], ['/', '+'], explode('.', $text)[1]), true),
+                $text,
                 false,
                 512,
                 JSON_THROW_ON_ERROR
             );
             dump($json); // TODO remove
 
-            if ($json->vc->credentialSubject->currentGivenName !== $person->getGivenName()
-               || $json->vc->credentialSubject->currentFamilyName !== $person->getFamilyName()
-               || $json->vc->credentialSubject->dateOfBirth !== date('Y-m-d\TH:i:s\Z', strtotime($person->getBirthDate()))) {
-                // names and/or birthday do not match - no automatic verification
-                return null;
-            }
+//            if ($json->vc->credentialSubject->currentGivenName !== $person->getGivenName()
+//               || $json->vc->credentialSubject->currentFamilyName !== $person->getFamilyName()
+//               || $json->vc->credentialSubject->dateOfBirth !== date('Y-m-d\TH:i:s\Z', strtotime($person->getBirthDate()))) {
+//                // names and/or birthday do not match - no automatic verification
+//                return null;
+//            }
 
             /*
             {
@@ -273,9 +283,9 @@ class ExternalApi implements DiplomaProviderInterface
               }
             }
             */
-            if (strpos($json->vc->credentialSubject->learningAchievement, 'Master') !== false) {
+            if (strpos($json->credentialSubject->learningAchievement, 'Master') !== false) {
                 $learningAchievement = 'Master';
-            } elseif (strpos($json->vc->credentialSubject->learningAchievement, 'Bachelor') !== false) {
+            } elseif (strpos($json->credentialSubject->learningAchievement, 'Bachelor') !== false) {
                 $learningAchievement = 'Bachelor';
             } else {
                 $learningAchievement = 'unknown';
@@ -283,11 +293,11 @@ class ExternalApi implements DiplomaProviderInterface
 
             $diploma = new Diploma();
             $diploma->setIdentifier(uniqid('', true));
-            $diploma->setName($json->vc->credentialSubject->studyProgram);
+            $diploma->setName($json->credentialSubject->studyProgram);
             $diploma->setCredentialCategory('degree');
             $diploma->setEducationalLevel($learningAchievement);
-            $diploma->setCreator($json->iss);
-            $diploma->setValidFrom($json->vc->credentialSubject->dateOfAchievement);
+            $diploma->setCreator($json->issuer);
+            $diploma->setValidFrom($json->credentialSubject->dateOfAchievement);
             $diploma->setEducationalAlignment('ISCED/480');
             $diploma->setText($text);
         } else {
