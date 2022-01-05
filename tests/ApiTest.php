@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApiTest extends ApiTestCase
 {
-    public function testBasics()
+    public function _testBasics()
     {
         $client = self::createClient();
         $response = $client->request('GET', '/educationalcredentials/diplomas');
@@ -29,12 +29,5 @@ class ApiTest extends ApiTestCase
         ]);
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSame('foo', json_decode($response->getContent(), true)['name']);
-    }
-
-    public function testNoAuth()
-    {
-        $client = self::createClient();
-        $response = $client->request('GET', '/educationalcredentials/diplomas/graz/loggedin-only');
-        $this->assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 }
