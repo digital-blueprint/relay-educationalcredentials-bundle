@@ -29,12 +29,13 @@ final class CreateLocalEducationalCredentialAction extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $body = json_decode($request->getContent(), false, 32);
         $did = $body->did;
+        $format = $body->format ?? '';
         //dump("got did = '$did'");
         $diploma = $this->api->getDiplomaById($identifier);
         if ($diploma === null) {
             throw new ApiError(Response::HTTP_BAD_REQUEST, 'requested diploma id unknown');
         }
-        $vc = $this->api->getVerifiableCredential($diploma, $did);
+        $vc = $this->api->getVerifiableCredential($diploma, $did, $format);
         if (!$vc) {
             throw new ApiError(Response::HTTP_BAD_REQUEST, 'unable to create verifiable crendential');
         }

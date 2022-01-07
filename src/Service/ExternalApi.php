@@ -32,20 +32,20 @@ class ExternalApi implements DiplomaProviderInterface
         $diploma1->setIdentifier('0a9f591d-e553-4a4d-a958-e86ce0269d08');
         $diploma1->setName('Master Studies in Computer Science');
         $diploma1->setCredentialCategory('degree');
-        $diploma1->setEducationalLevel('Master of Science');
+        $diploma1->setEducationalLevel('Master\'s Degree');
         $diploma1->setCreator('TU Graz');
         $diploma1->setValidFrom('2021-03-18T00:00:00.000Z');
-        $diploma1->setEducationalAlignment('ISCED/481');
+        $diploma1->setEducationalAlignment('481');
         $diploma1->setText('');
 
         $diploma2 = new Diploma();
         $diploma2->setIdentifier('8d619927-28b7-4970-9e5a-c4a47d8e9ad1');
         $diploma2->setName('Bachelor Studies in Computer Science');
         $diploma2->setCredentialCategory('degree');
-        $diploma2->setEducationalLevel('Bachelor');
+        $diploma2->setEducationalLevel('Bachelor\'s Degree');
         $diploma2->setCreator('TU Graz');
         $diploma2->setValidFrom('2019-09-04T00:00:00.000Z');
-        $diploma2->setEducationalAlignment('ISCED/480');
+        $diploma2->setEducationalAlignment('480');
         $diploma2->setText('');
 
         $this->diplomas[] = $diploma1;
@@ -69,11 +69,16 @@ class ExternalApi implements DiplomaProviderInterface
     }
 
     /**
+     * @param Diploma $diploma
+     * @param string $did
+     * @param string $format
+     * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getVerifiableCredential(Diploma $diploma, string $did): string
+    public function getVerifiableCredential(Diploma $diploma, string $did, string $format = ''): string
     {
         $person = $this->personProvider->getCurrentPerson();
+        $immatriculationNumber = '00952172';
 
         /*
         {
@@ -92,16 +97,16 @@ class ExternalApi implements DiplomaProviderInterface
                 "credentialSubject": {
                     "type":"Student",
                     "id":"did:ebsi:zqpZej3RbScW9feAjwipKn4",
-                    "studyProgram":"Master Studies in Strategy, Innovation, and Management Control",
-                    "immatriculationNumber":"00000000",
-                    "currentGivenName":"Eva",
-                    "currentFamilyName":"Musterfrau",
+                    "currentGivenName":"Lena-Victoria",
+                    "currentFamilyName":"Dosiak",
+                    "dateOfBirth":"1979-05-13T00:00:00",
+                    "immatriculationNumber":"00952172",
                     "learningAchievement":"Master's Degree",
-                    "dateOfBirth":"1999-10-22T00:00:00.000Z",
+                    "studyProgram":"Master Studies in Strategy, Innovation, and Management Control",
                     "dateOfAchievement":"2021-01-04T00:00:00.000Z",
-                    "overallEvaluation":"passed with honors",
-                    "eqfLevel":"http://data.europa.eu/snb/eqf/7",
-                    "targetFrameworkName":"European Qualifications Framework for lifelong learning - (2008/C 111/01)"},
+                    "iscedfCode": [
+                        "0421"
+                    ],
                     "proof": {
                         "type":"EcdsaSecp256k1Signature2019",
                         "created":"2021-12-07T14:48:12Z",
@@ -117,7 +122,7 @@ class ExternalApi implements DiplomaProviderInterface
         $obj->credential = new \stdClass();
         $obj->credential->{'@context'} = [
             'https://www.w3.org/2018/credentials/v1',
-            'https://danubetech.github.io/ebsi4austria-examples/context/essif-schemas-vc-2020-v1.jsonld',
+            'https://wicket1001.github.io/ebsi4austria-examples/context/essif-schemas-vc-2020-v2.jsonld',
         ];
         $obj->credential->type = [
             'VerifiableCredential',
@@ -129,19 +134,19 @@ class ExternalApi implements DiplomaProviderInterface
         $obj->credential->credentialSubject = new \stdClass();
         $obj->credential->credentialSubject->type = 'Student';
         $obj->credential->credentialSubject->id = $did;
-        $obj->credential->credentialSubject->studyProgram = $diploma->getName();
-        $obj->credential->credentialSubject->learningAchievement = $diploma->getEducationalLevel();
-        $obj->credential->credentialSubject->dateOfAchievement = $diploma->getValidFrom();
-        $obj->credential->credentialSubject->immatriculationNumber = '0000000';
         $obj->credential->credentialSubject->currentGivenName = $person->getGivenName();
         $obj->credential->credentialSubject->currentFamilyName = $person->getFamilyName();
-        $obj->credential->credentialSubject->dateOfBirth = date('Y-m-d\TH:i:s\Z', strtotime($person->getBirthDate()));
-        //$obj->credential->credentialSubject->overallEvaluation = 'passed with honors';
-        $obj->credential->credentialSubject->eqfLevel = 'http://data.europa.eu/snb/eqf/7'; //$diploma->getEducationalAlignment(); // "ISCED/433";
-        $obj->credential->credentialSubject->targetFrameworkName = 'European Qualifications Framework for lifelong learning - (2008/C 111/01)';
+        $obj->credential->credentialSubject->dateOfBirth = date('Y-m-d\TH:i:s', strtotime($person->getBirthDate()));
+        $obj->credential->credentialSubject->immatriculationNumber = $immatriculationNumber;
+        $obj->credential->credentialSubject->learningAchievement = $diploma->getEducationalLevel();
+        $obj->credential->credentialSubject->studyProgram = $diploma->getName();
+        $obj->credential->credentialSubject->dateOfAchievement = $diploma->getValidFrom();
+        $obj->credential->credentialSubject->iscedfCode = explode(',', $diploma->getEducationalAlignment());
 
         $obj->options = new \stdClass();
-        //$obj->options->format = 'jsonldjwt';
+        if ($format !== '') {
+            $obj->options->format = $format; //'jsonldjwt'
+        }
         //$obj->options->returnMetadata = true;
         $obj->options->credentialFormatOptions = new \stdClass();
         $obj->options->credentialFormatOptions->documentLoaderEnableHttps = true;
@@ -174,7 +179,10 @@ class ExternalApi implements DiplomaProviderInterface
      */
     public function verifyVerifiableCredential($text): ?Diploma
     {
+        $isJWT = $text[0] !== '{';
+
         $person = $this->personProvider->getCurrentPerson();
+        $immatricationNumer = '00952172';
 
         /*
         {
@@ -190,16 +198,25 @@ class ExternalApi implements DiplomaProviderInterface
         }
         */
         $obj = new \stdClass();
-        // JWT
-//        $obj->verifiableCredential = new \stdClass();
-//        $obj->verifiableCredential->vc = $text;
-        // proof
-        $obj->verifiableCredential = json_decode($text);
+        // which format is the vc in?
+        if ($isJWT) {
+            // JWT
+            $obj->verifiableCredential = new \stdClass();
+            $obj->verifiableCredential->vc = $text;
+        } else {
+            // proof
+            $obj->verifiableCredential = json_decode(
+                $text,
+                false,
+                32,
+                JSON_THROW_ON_ERROR
+            );
+        }
         $obj->options = new \stdClass();
         $obj->options->returnMetadata = true;
         $obj->options->credentialFormatOptions = new \stdClass();
         $obj->options->credentialFormatOptions->documentLoaderEnableHttps = true;
-        dump($obj);
+        //dump($obj);
 
         $stack = HandlerStack::create();
         $client_options = [
@@ -222,7 +239,7 @@ class ExternalApi implements DiplomaProviderInterface
                 32,
                 JSON_THROW_ON_ERROR
             );
-            dump($result); // TODO remove
+            //dump($result); // TODO remove
             $ok = $result->verified;
         } catch (RequestException $e) {
             //$message = $e->getMessage();
@@ -235,21 +252,26 @@ class ExternalApi implements DiplomaProviderInterface
         }
 
         if ($ok) {
+            if ($isJWT) {
+                $payload = explode('.', $text)[1];
+                $text = base64_decode(str_replace(['_', '-'], ['/', '+'], $payload), true);
+            }
             $json = json_decode(
-            //base64_decode(str_replace(['_', '-'], ['/', '+'], explode('.', $text)[1]), true),
                 $text,
                 false,
-                512,
+                32,
                 JSON_THROW_ON_ERROR
             );
-            dump($json); // TODO remove
+            //dump($json); // TODO remove
 
-//            if ($json->vc->credentialSubject->currentGivenName !== $person->getGivenName()
-//               || $json->vc->credentialSubject->currentFamilyName !== $person->getFamilyName()
-//               || $json->vc->credentialSubject->dateOfBirth !== date('Y-m-d\TH:i:s\Z', strtotime($person->getBirthDate()))) {
-//                // names and/or birthday do not match - no automatic verification
-//                return null;
-//            }
+            $credentialSubject = $isJWT ? $json->vc->credentialSubject : $json->credentialSubject;
+            if ($credentialSubject->currentGivenName !== $person->getGivenName()
+               || $credentialSubject->currentFamilyName !== $person->getFamilyName()
+               || $credentialSubject->dateOfBirth !== date('Y-m-d\TH:i:s', strtotime($person->getBirthDate()))) {
+                // names and/or birthday do not match - no automatic verification
+                return null;
+            }
+            $issuer = $isJWT ? $json->iss : $json->issuer;
 
             /*
             {
@@ -270,35 +292,32 @@ class ExternalApi implements DiplomaProviderInterface
                   "type": "Student",
                   "id": "did:ebsi:zqpZej3RbScW9feAjwipKn4",
                   "studyProgram": "Master Studies in Computer Science",
-                  "learningAchievement": "Master of Science",
+                  "learningAchievement": "Master's Degree",
                   "dateOfAchievement": "2021-03-18T00:00:00.000Z",
-                  "immatriculationNumber": "0000000",
+                  "immatriculationNumber": "00952172",
                   "currentGivenName": "Eva",
                   "currentFamilyName": "Musterfrau",
                   "dateOfBirth": "1999-10-22T00:00:00.000Z",
-                  "overallEvaluation": "passed with honors",
-                  "eqfLevel": "http://data.europa.eu/snb/eqf/7",
-                  "targetFrameworkName": "European Qualifications Framework for lifelong learning - (2008/C 111/01)"
                 }
               }
             }
             */
-            if (strpos($json->credentialSubject->learningAchievement, 'Master') !== false) {
-                $learningAchievement = 'Master';
-            } elseif (strpos($json->credentialSubject->learningAchievement, 'Bachelor') !== false) {
-                $learningAchievement = 'Bachelor';
+            if (strpos($credentialSubject->learningAchievement, 'Master') !== false) {
+                $learningAchievement = 'Master\'s Degree';
+            } elseif (strpos($credentialSubject->learningAchievement, 'Bachelor') !== false) {
+                $learningAchievement = 'Bachelor\'s Degree';
             } else {
                 $learningAchievement = 'unknown';
             }
 
             $diploma = new Diploma();
             $diploma->setIdentifier(uniqid('', true));
-            $diploma->setName($json->credentialSubject->studyProgram);
+            $diploma->setName($credentialSubject->studyProgram);
             $diploma->setCredentialCategory('degree');
             $diploma->setEducationalLevel($learningAchievement);
-            $diploma->setCreator($json->issuer);
-            $diploma->setValidFrom($json->credentialSubject->dateOfAchievement);
-            $diploma->setEducationalAlignment('ISCED/480');
+            $diploma->setCreator($issuer);
+            $diploma->setValidFrom($credentialSubject->dateOfAchievement);
+            $diploma->setEducationalAlignment(implode(',', $credentialSubject->iscedfCode));
             $diploma->setText($text);
         } else {
             $diploma = null;
