@@ -73,6 +73,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                                 "type" = "object",
  *                                 "properties" = {
  *                                     "did" = {"description" = "DID supplied by student", "type" = "string", "example" = "did:key:z6MkqyYXcBQZ5hZ9BFHBiVnmrZ1C1HCpesgZQoTdgjLdU6Ah"},
+ *                                     "format" = {"description" = "jsonldjwt or empty", "type" = "string", "example" = "jsonldjwt"},
  *                                 },
  *                                 "required" = {"did"},
  *                             },
