@@ -269,7 +269,16 @@ class ExternalApi implements DiplomaProviderInterface
                || $credentialSubject->currentFamilyName !== $person->getFamilyName()
                || $credentialSubject->dateOfBirth !== date('Y-m-d\TH:i:s', strtotime($person->getBirthDate()))) {
                 // names and/or birthday do not match - no automatic verification
-                return null;
+                dump(['person does not match subject in VC' => 'inactive for now',
+                    'person GivenName' => $person->getGivenName(),
+                    'person FamilyName' => $person->getFamilyName(),
+                    'person BirthDay' => date('Y-m-d\TH:i:s', strtotime($person->getBirthDate())),
+                    'subject GivenName' => $credentialSubject->currentGivenName,
+                    'subject FamilyName' => $credentialSubject->currentFamilyName,
+                    'subject DateOfBirth' => $credentialSubject->dateOfBirth,
+                ]);
+                // since we fake only in KeyCloak and not in LDAP, do not error out
+                //return null;
             }
             $issuer = $isJWT ? $json->iss : $json->issuer;
 
