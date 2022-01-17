@@ -69,10 +69,6 @@ class ExternalApi implements DiplomaProviderInterface
     }
 
     /**
-     * @param Diploma $diploma
-     * @param string $did
-     * @param string $format
-     * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getVerifiableCredential(Diploma $diploma, string $did, string $format = ''): string
@@ -129,7 +125,11 @@ class ExternalApi implements DiplomaProviderInterface
             'VerifiableAttestation',
             'DiplomaCredential',
         ];
-        $obj->credential->issuer = $this->service->issuer;
+        $obj->credential->name = $diploma->getName() . ', ' . substr($diploma->getValidFrom(),0,10);
+        $obj->credential->description = 'Diploma of TU Graz';
+        $obj->credential->issuer = new \stdClass();
+        $obj->credential->issuer->id = $this->service->issuer;
+        $obj->credential->issuer->image = 'data:image/png;base64,' . base64_encode(file_get_contents(__DIR__ . '/../Assets/university-256x256.png'));
         $obj->credential->issuanceDate = date('Y-m-d\TH:i:s\Z', time() - 3600); //server need to be set to UTC
         $obj->credential->credentialSubject = new \stdClass();
         $obj->credential->credentialSubject->type = 'Student';
@@ -324,9 +324,13 @@ class ExternalApi implements DiplomaProviderInterface
             $diploma->setName($credentialSubject->studyProgram);
             $diploma->setCredentialCategory('degree');
             $diploma->setEducationalLevel($learningAchievement);
-            $diploma->setCreator($issuer);
+            if (is_string($issuer)) {
+                $diploma->setCreator($issuer);
+            } else {
+                $diploma->setCreator($issuer->id);
+            }
             $diploma->setValidFrom($credentialSubject->dateOfAchievement);
-            $diploma->setEducationalAlignment(implode(',', $credentialSubject->iscedfCode));
+            $diploma->setEducationalAlignment(implode(',', $credentialSubject->iscedfCode ?? []));
             $diploma->setText($text);
         } else {
             $diploma = null;
