@@ -130,6 +130,7 @@ class ExternalApi implements DiplomaProviderInterface
         $obj->credential->issuer = new \stdClass();
         $obj->credential->issuer->id = $this->service->issuer;
         $obj->credential->issuer->image = 'data:image/png;base64,' . base64_encode(file_get_contents(__DIR__ . '/../Assets/university-256x256.png'));
+        $obj->credential->image = 'data:image/png;base64,' . base64_encode(file_get_contents(__DIR__ . '/../Assets/university-256x256.png'));
         $obj->credential->issuanceDate = date('Y-m-d\TH:i:s\Z', time() - 3600); //server need to be set to UTC
         $obj->credential->credentialSubject = new \stdClass();
         $obj->credential->credentialSubject->type = 'Student';
