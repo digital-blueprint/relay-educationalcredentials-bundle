@@ -125,11 +125,12 @@ class ExternalApi implements DiplomaProviderInterface
             'VerifiableAttestation',
             'DiplomaCredential',
         ];
+        $obj->credential->id = 'urn:uuid:' . $this->uuid();
         $obj->credential->name = $diploma->getName() . ', ' . substr($diploma->getValidFrom(),0,10);
         $obj->credential->description = 'Diploma of TU Graz';
         $obj->credential->issuer = new \stdClass();
         $obj->credential->issuer->id = $this->service->issuer;
-        $obj->credential->issuer->image = 'data:image/png;base64,' . base64_encode(file_get_contents(__DIR__ . '/../Assets/university-256x256.png'));
+        //$obj->credential->issuer->image = 'data:image/png;base64,' . base64_encode(file_get_contents(__DIR__ . '/../Assets/university-256x256.png'));
         $obj->credential->image = 'data:image/png;base64,' . base64_encode(file_get_contents(__DIR__ . '/../Assets/university-256x256.png'));
         $obj->credential->issuanceDate = date('Y-m-d\TH:i:s\Z', time() - 3600); //server need to be set to UTC
         $obj->credential->credentialSubject = new \stdClass();
@@ -338,5 +339,16 @@ class ExternalApi implements DiplomaProviderInterface
         }
 
         return $diploma;
+    }
+
+    private function uuid()
+    {
+        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0x0fff) | 0x4000,
+            mt_rand(0, 0x3fff) | 0x8000,
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+        );
     }
 }
