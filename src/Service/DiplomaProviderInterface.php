@@ -14,5 +14,6 @@ interface DiplomaProviderInterface extends LoggerAwareInterface
     public function getDiplomas(): array;
 
     public function getVerifiableCredential(Diploma $diploma, string $did): string;
+
     public function verifyVerifiableCredential($text): ?Diploma;
 }
