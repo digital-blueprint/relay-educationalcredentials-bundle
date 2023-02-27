@@ -89,6 +89,7 @@ class ExternalApi implements DiplomaProviderInterface
                 break;
             default:
         }
+
         return $result;
         // Replaced because we must not use DanubeTech's docker anymore
         /*
