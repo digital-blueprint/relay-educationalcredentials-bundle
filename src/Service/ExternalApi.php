@@ -6,6 +6,7 @@ namespace Dbp\Relay\EducationalcredentialsBundle\Service;
 
 use Dbp\Relay\BasePersonBundle\API\PersonProviderInterface;
 use Dbp\Relay\CoreBundle\Helpers\GuzzleTools;
+use Dbp\Relay\CoreBundle\LocalData\LocalData;
 use Dbp\Relay\EducationalcredentialsBundle\Entity\Diploma;
 use GuzzleHttp\Client;
 //use GuzzleHttp\Exception\GuzzleException;
@@ -17,6 +18,8 @@ use Psr\Log\LoggerAwareTrait;
 class ExternalApi implements DiplomaProviderInterface
 {
     use LoggerAwareTrait;
+
+    private const BIRTH_DATA_ATTRIBUTE = 'birthDate';
 
     private $diplomas;
     private $service;
@@ -205,8 +208,10 @@ class ExternalApi implements DiplomaProviderInterface
     {
         $isJWT = $text[0] !== '{';
 
-        $person = $this->personProvider->getCurrentPerson();
-        $immatricationNumer = '00952172';
+        $options = [];
+        LocalData::requestLocalDataAttributes($options, [self::BIRTH_DATA_ATTRIBUTE]);
+        $currentPerson = $this->personProvider->getCurrentPerson($options);
+        $currentPersonBirthDate = strtotime($currentPerson->getLocalDataValue(self::BIRTH_DATA_ATTRIBUTE));
 
         /*
         {
@@ -293,15 +298,15 @@ class ExternalApi implements DiplomaProviderInterface
             //dump($json); // TODO remove
 
             $credentialSubject = $isJWT ? $json->vc->credentialSubject : $json->credentialSubject;
-            if ($credentialSubject->currentGivenName !== $person->getGivenName()
-               || $credentialSubject->currentFamilyName !== $person->getFamilyName()
-               || $credentialSubject->dateOfBirth !== date('Y-m-d\TH:i:s', strtotime($person->getBirthDate()))) {
+            if ($credentialSubject->currentGivenName !== $currentPerson->getGivenName()
+               || $credentialSubject->currentFamilyName !== $currentPerson->getFamilyName()
+               || $credentialSubject->dateOfBirth !== date('Y-m-d\TH:i:s', $currentPersonBirthDate)) {
                 // names and/or birthday do not match - no automatic verification
                 /* @noinspection ForgottenDebugOutputInspection */
                 dump(['person does not match subject in VC' => 'inactive for now',
-                    'person GivenName' => $person->getGivenName(),
-                    'person FamilyName' => $person->getFamilyName(),
-                    'person BirthDay' => date('Y-m-d\TH:i:s', strtotime($person->getBirthDate())),
+                    'person GivenName' => $currentPerson->getGivenName(),
+                    'person FamilyName' => $currentPerson->getFamilyName(),
+                    'person BirthDay' => date('Y-m-d\TH:i:s', $currentPersonBirthDate),
                     'subject GivenName' => $credentialSubject->currentGivenName,
                     'subject FamilyName' => $credentialSubject->currentFamilyName,
                     'subject DateOfBirth' => $credentialSubject->dateOfBirth,
