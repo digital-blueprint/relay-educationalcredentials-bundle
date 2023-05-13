@@ -5,7 +5,7 @@
     "require": {
         "php": ">=7.3",
         "ext-json": "*",
-        "api-platform/core": "^2.6.8",
+        "api-platform/core": "^3.0.0",
         "dbp/relay-base-person-bundle": "^0.2.0",
         "dbp/relay-core-bundle": "^0.1.80",
         "guzzlehttp/guzzle": "^7.0",
