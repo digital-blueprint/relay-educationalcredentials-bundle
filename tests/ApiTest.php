@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApiTest extends ApiTestCase
 {
+    public function testKernel()
+    {
+        $this->assertNotNull(self::createClient());
+    }
+
     public function _testBasics()
     {
         $client = self::createClient();

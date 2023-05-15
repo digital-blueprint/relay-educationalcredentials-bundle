@@ -23,7 +23,7 @@ class DiplomaDataPersister extends AbstractController implements DataPersisterIn
         return $data instanceof Diploma;
     }
 
-    public function persist($data)
+    public function persist($data): void
     {
         // TODO
     }
