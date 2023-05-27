@@ -236,16 +236,16 @@
         },
         {
             "name": "dbp/relay-core-bundle",
-            "version": "v0.1.103",
+            "version": "v0.1.105",
             "source": {
                 "type": "git",
                 "url": "https://github.com/digital-blueprint/relay-core-bundle.git",
-                "reference": "ba7595372088b8e33f53d68f37344d823613ae29"
+                "reference": "b722b9a0dd66e406ad749376633763f6496068a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/digital-blueprint/relay-core-bundle/zipball/ba7595372088b8e33f53d68f37344d823613ae29",
-                "reference": "ba7595372088b8e33f53d68f37344d823613ae29",
+                "url": "https://api.github.com/repos/digital-blueprint/relay-core-bundle/zipball/b722b9a0dd66e406ad749376633763f6496068a9",
+                "reference": "b722b9a0dd66e406ad749376633763f6496068a9",
                 "shasum": ""
             },
             "require": {
@@ -313,9 +313,9 @@
             "description": "The core bundle of the Relay API gateway",
             "support": {
                 "issues": "https://github.com/digital-blueprint/relay-core-bundle/issues",
-                "source": "https://github.com/digital-blueprint/relay-core-bundle/tree/v0.1.103"
+                "source": "https://github.com/digital-blueprint/relay-core-bundle/tree/v0.1.105"
             },
-            "time": "2023-05-17T12:00:58+00:00"
+            "time": "2023-05-23T12:30:21+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -793,16 +793,16 @@
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "1.5.2",
+            "version": "1.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "b94b2807d85443f9719887892882d0329d1e2598"
+                "reference": "67ab6e18aaa14d753cc148911d273f6e6cb6721e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/b94b2807d85443f9719887892882d0329d1e2598",
-                "reference": "b94b2807d85443f9719887892882d0329d1e2598",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/67ab6e18aaa14d753cc148911d273f6e6cb6721e",
+                "reference": "67ab6e18aaa14d753cc148911d273f6e6cb6721e",
                 "shasum": ""
             },
             "require": {
@@ -812,11 +812,6 @@
                 "symfony/phpunit-bridge": "^4.4 || ^5.1"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.5-dev"
-                }
-            },
             "autoload": {
                 "files": [
                     "src/functions_include.php"
@@ -857,7 +852,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/1.5.2"
+                "source": "https://github.com/guzzle/promises/tree/1.5.3"
             },
             "funding": [
                 {
@@ -873,7 +868,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-28T14:55:35+00:00"
+            "time": "2023-05-21T12:31:43+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -993,20 +988,21 @@
         },
         {
             "name": "kevinrob/guzzle-cache-middleware",
-            "version": "v4.0.2",
+            "version": "v4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kevinrob/guzzle-cache-middleware.git",
-                "reference": "24b93edc942f2eaaeb17f7ae0d6db0f77f4ed4ea"
+                "reference": "8528f8c040c333480cbf885ef669dfb33a21f1e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kevinrob/guzzle-cache-middleware/zipball/24b93edc942f2eaaeb17f7ae0d6db0f77f4ed4ea",
-                "reference": "24b93edc942f2eaaeb17f7ae0d6db0f77f4ed4ea",
+                "url": "https://api.github.com/repos/Kevinrob/guzzle-cache-middleware/zipball/8528f8c040c333480cbf885ef669dfb33a21f1e8",
+                "reference": "8528f8c040c333480cbf885ef669dfb33a21f1e8",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "^6.0 || ^7.0",
+                "guzzlehttp/promises": "^1.4 || ^2.0",
                 "guzzlehttp/psr7": "^1.7.0 || ^2.0.0",
                 "php": ">=7.2.0"
             },
@@ -1071,9 +1067,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Kevinrob/guzzle-cache-middleware/issues",
-                "source": "https://github.com/Kevinrob/guzzle-cache-middleware/tree/v4.0.2"
+                "source": "https://github.com/Kevinrob/guzzle-cache-middleware/tree/v4.1.0"
             },
-            "time": "2022-10-02T13:13:18+00:00"
+            "time": "2023-05-26T10:54:58+00:00"
         },
         {
             "name": "monolog/monolog",
