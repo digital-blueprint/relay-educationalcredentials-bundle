@@ -30,7 +30,6 @@ final class CreateLocalEducationalCredentialAction extends AbstractController
         $body = json_decode($request->getContent(), false, 32);
         $did = $body->did;
         $format = $body->format ?? '';
-        //dump("got did = '$did'");
         $diploma = $this->api->getDiplomaById($identifier);
         if ($diploma === null) {
             throw new ApiError(Response::HTTP_BAD_REQUEST, 'requested diploma id unknown');

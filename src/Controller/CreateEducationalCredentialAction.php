@@ -28,8 +28,6 @@ final class CreateEducationalCredentialAction extends AbstractController
     public function __invoke(Request $request): Diploma
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $text = $request->get('text', '');
-//        dump($text);
         $text = $request->get('text');
         if ($text === null) {
             throw new BadRequestHttpException('Missing "text"');

@@ -1,8 +1,4 @@
 services:
-  Dbp\Relay\EducationalcredentialsBundle\Command\TestCommand:
-    autowire: true
-    autoconfigure: true
-
   Dbp\Relay\EducationalcredentialsBundle\Controller\:
     resource: '../../Controller'
     autoconfigure: true
