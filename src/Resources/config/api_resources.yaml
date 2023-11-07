@@ -1,0 +1,105 @@
+resources:
+  Dbp\Relay\EducationalcredentialsBundle\ApiPlatform\Diploma:
+    security: 'is_granted("IS_AUTHENTICATED_FULLY")'
+    types: ['https://schema.org/EducationalOccupationalCredential']
+    shortName: "EducationalcredentialsDiploma"
+    normalizationContext:
+      groups: ["EducationalcredentialsDiploma:output"]
+    denormalizationContext:
+      groups: ["EducationalcredentialsDiploma:input"]
+    operations:
+
+      ApiPlatform\Metadata\GetCollection:
+        security: 'is_granted("IS_AUTHENTICATED_FULLY")'
+        provider: Dbp\Relay\EducationalcredentialsBundle\ApiPlatform\DiplomaProvider
+        uriTemplate: "/educationalcredentials/diplomas"
+        openapiContext:
+          summary: "Get all available diploma from local data."
+          tags: ["Educational Credentials"]
+
+      ApiPlatform\Metadata\Post:
+        security: 'is_granted("IS_AUTHENTICATED_FULLY")'
+        controller: Dbp\Relay\EducationalcredentialsBundle\ApiPlatform\CreateEducationalCredentialAction
+        uriTemplate: "/educationalcredentials/diplomas"
+        deserialize: false
+        openapiContext:
+          summary: "Create a diploma from remote data (VC)."
+          tags: ["Educational Credentials"]
+          requestBody:
+            content:
+              multipart/form-data:
+                schema:
+                  type: "object"
+                  required: ["text"]
+                  properties:
+                    text:
+                      description: "VC supplied by student"
+                      type: "string"
+                      example: ""
+
+      ApiPlatform\Metadata\Get:
+        security: 'is_granted("IS_AUTHENTICATED_FULLY")'
+        provider: Dbp\Relay\EducationalcredentialsBundle\ApiPlatform\DiplomaProvider
+        uriTemplate: "/educationalcredentials/diplomas/{identifier}"
+        openapiContext:
+          summary: "Get a diploma from local data."
+          tags: ["Educational Credentials"]
+          parameters:
+            - name: identifier
+              in: path
+              description: 'Id of diploma'
+              required: true
+              type: string
+              example: "0a9f591d-e553-4a4d-a958-e86ce0269d08"
+
+      post_create_vc:
+        security: 'is_granted("IS_AUTHENTICATED_FULLY")'
+        class: ApiPlatform\Metadata\Post
+        method: POST
+        uriTemplate: "/educationalcredentials/diplomas/{identifier}/verifiable"
+        provider: Dbp\Relay\EducationalcredentialsBundle\ApiPlatform\DiplomaProvider
+        controller: Dbp\Relay\EducationalcredentialsBundle\ApiPlatform\CreateLocalEducationalCredentialAction
+        openapiContext:
+          summary: "Create a Educational Credential from local data."
+          tags: ["Educational Credentials"]
+          parameters:
+            - name: identifier
+              in: path
+              description: 'Id of diploma'
+              required: true
+              type: string
+              example: "0a9f591d-e553-4a4d-a958-e86ce0269d08"
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: "object"
+                  required: ["did"]
+                  properties:
+                    did:
+                      description: "DID supplied by student"
+                      type: "string"
+                      example: "did:key:z6MkqyYXcBQZ5hZ9BFHBiVnmrZ1C1HCpesgZQoTdgjLdU6Ah"
+                    format:
+                      description: "jsonldjwt or empty"
+                      type: "string"
+                      example: "jsonldjwt"
+
+    properties:
+      identifier:
+        identifier: true
+        iri: "http://schema.org/identifier"
+      name:
+        iri: 'https://schema.org/name'
+      credentialCategory:
+        iri: "https://schema.org/credentialCategory"
+      educationalLevel:
+        iri: "https://schema.org/educationalLevel"
+      creator:
+        iri: "https://schema.org/creator"
+      validFrom:
+        iri: "https://schema.org/validFrom"
+      educationalAlignment:
+        iri: "https://schema.org/educationalAlignment"
+      text:
+        iri: "https://schema.org/text"

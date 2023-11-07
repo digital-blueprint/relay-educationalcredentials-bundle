@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EducationalcredentialsBundle\Service;
 
-use Dbp\Relay\EducationalcredentialsBundle\Entity\Diploma;
+use Dbp\Relay\EducationalcredentialsBundle\ApiPlatform\Diploma;
 use Psr\Log\LoggerAwareInterface;
 
 interface DiplomaProviderInterface extends LoggerAwareInterface

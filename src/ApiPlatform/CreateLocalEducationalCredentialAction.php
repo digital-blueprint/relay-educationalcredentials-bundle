@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EducationalcredentialsBundle\Controller;
+namespace Dbp\Relay\EducationalcredentialsBundle\ApiPlatform;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
-use Dbp\Relay\EducationalcredentialsBundle\Entity\Diploma;
 use Dbp\Relay\EducationalcredentialsBundle\Service\DiplomaProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

@@ -1,18 +1,8 @@
 services:
-  Dbp\Relay\EducationalcredentialsBundle\Controller\:
-    resource: '../../Controller'
+  Dbp\Relay\EducationalcredentialsBundle\ApiPlatform\:
+    resource: '../../ApiPlatform'
     autoconfigure: true
     autowire: true
-
-  Dbp\Relay\EducationalcredentialsBundle\DataPersister\:
-    resource: '../../DataPersister'
-    autowire: true
-    autoconfigure: true
-
-  Dbp\Relay\EducationalcredentialsBundle\DataProvider\:
-    resource: '../../DataProvider'
-    autowire: true
-    autoconfigure: true
 
   Dbp\Relay\EducationalcredentialsBundle\Service\ExternalApi:
     autowire: true

@@ -7,7 +7,7 @@ namespace Dbp\Relay\EducationalcredentialsBundle\Service;
 use Dbp\Relay\BasePersonBundle\API\PersonProviderInterface;
 use Dbp\Relay\CoreBundle\Helpers\GuzzleTools;
 use Dbp\Relay\CoreBundle\LocalData\LocalData;
-use Dbp\Relay\EducationalcredentialsBundle\Entity\Diploma;
+use Dbp\Relay\EducationalcredentialsBundle\ApiPlatform\Diploma;
 use GuzzleHttp\Client;
 //use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
