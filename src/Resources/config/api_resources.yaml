@@ -71,7 +71,7 @@ resources:
               example: "0a9f591d-e553-4a4d-a958-e86ce0269d08"
           requestBody:
             content:
-              application/json:
+              application/ld+json:
                 schema:
                   type: "object"
                   required: ["did"]
