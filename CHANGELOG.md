@@ -1,3 +1,8 @@
+# v0.1.2
+
+* Drop support for PHP 7.3
+* Minor fixes for the api docs examples
+
 # v0.1.1
 
 * Port to new api-platform metadata system. No changes to the actual
