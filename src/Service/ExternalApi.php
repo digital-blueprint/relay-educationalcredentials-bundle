@@ -9,7 +9,7 @@ use Dbp\Relay\CoreBundle\Helpers\GuzzleTools;
 use Dbp\Relay\CoreBundle\LocalData\LocalData;
 use Dbp\Relay\EducationalcredentialsBundle\ApiPlatform\Diploma;
 use GuzzleHttp\Client;
-//use GuzzleHttp\Exception\GuzzleException;
+// use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\RequestOptions;
@@ -245,7 +245,7 @@ class ExternalApi implements DiplomaProviderInterface
         $obj->options->returnMetadata = true;
         $obj->options->credentialFormatOptions = new \stdClass();
         $obj->options->credentialFormatOptions->documentLoaderEnableHttps = true;
-        //dump($obj);
+        // dump($obj);
 
         $stack = HandlerStack::create();
         $client_options = [
@@ -275,13 +275,13 @@ class ExternalApi implements DiplomaProviderInterface
             */
             $ok = $this->fakeVerify($text);
         } catch (RequestException $e) {
-            //$message = $e->getMessage();
+            // $message = $e->getMessage();
             if ($e->getCode() === 400) {
                 $ok = false;
             } else {
                 throw $e;
             }
-//        } catch (GuzzleException $e) {
+            //        } catch (GuzzleException $e) {
         }
 
         if ($ok) {
@@ -295,7 +295,7 @@ class ExternalApi implements DiplomaProviderInterface
                 32,
                 JSON_THROW_ON_ERROR
             );
-            //dump($json); // TODO remove
+            // dump($json); // TODO remove
 
             $credentialSubject = $isJWT ? $json->vc->credentialSubject : $json->credentialSubject;
             if ($credentialSubject->currentGivenName !== $currentPerson->getGivenName()
@@ -312,7 +312,7 @@ class ExternalApi implements DiplomaProviderInterface
                     'subject DateOfBirth' => $credentialSubject->dateOfBirth,
                 ]);
                 // since we fake only in KeyCloak and not in LDAP, do not error out
-                //return null;
+                // return null;
             }
             $issuer = $isJWT ? $json->iss : $json->issuer;
 
