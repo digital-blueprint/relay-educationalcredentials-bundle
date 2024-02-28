@@ -12,6 +12,9 @@ use Dbp\Relay\CoreBundle\Rest\Query\Pagination\PartialPaginator;
 use Dbp\Relay\EducationalcredentialsBundle\Service\DiplomaProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * @implements ProviderInterface<Diploma>
+ */
 final class DiplomaProvider extends AbstractController implements ProviderInterface
 {
     private $api;
