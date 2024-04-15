@@ -9,6 +9,9 @@ use ApiPlatform\State\ProcessorInterface;
 use Dbp\Relay\EducationalcredentialsBundle\Service\DiplomaProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * @implements ProcessorInterface<Diploma,mixed>
+ */
 class DiplomaProcessor extends AbstractController implements ProcessorInterface
 {
     private $api;
