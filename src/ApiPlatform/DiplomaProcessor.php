@@ -10,7 +10,7 @@ use Dbp\Relay\EducationalcredentialsBundle\Service\DiplomaProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @implements ProcessorInterface<Diploma,mixed>
+ * @psalm-suppress MissingTemplateParam
  */
 class DiplomaProcessor extends AbstractController implements ProcessorInterface
 {
