@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.1.7
+
+* Port to PHPUnit 10
+* Port from doctrine annotations to php attributes
+* Fix POST endpoint content-type validation with api-platform 3.3
+
+## v0.1.6
+
+* Minor psalm fixes
+
 ## v0.1.5
 
 * Add support for api-platform 3.2
