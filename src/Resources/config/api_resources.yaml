@@ -22,6 +22,8 @@ resources:
         controller: Dbp\Relay\EducationalcredentialsBundle\ApiPlatform\CreateEducationalCredentialAction
         uriTemplate: "/educationalcredentials/diplomas"
         deserialize: false
+        inputFormats:
+          multipart: "multipart/form-data"
         openapiContext:
           summary: "Create a diploma from remote data (VC)."
           tags: ["Educational Credentials"]
