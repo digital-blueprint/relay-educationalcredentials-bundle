@@ -11,52 +11,45 @@ class Diploma
     private $identifier;
 
     /**
-     * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
-     *
      * @var string
      */
+    #[Groups(['EducationalcredentialsDiploma:output', 'EducationalcredentialsDiploma:input'])]
     private $name;
 
     /**
-     * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
-     *
      * @var string
      */
+    #[Groups(['EducationalcredentialsDiploma:output', 'EducationalcredentialsDiploma:input'])]
     private $credentialCategory;
 
     /**
-     * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
-     *
      * @var string
      */
+    #[Groups(['EducationalcredentialsDiploma:output', 'EducationalcredentialsDiploma:input'])]
     private $educationalLevel;
 
     /**
-     * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
-     *
      * @var string
      */
+    #[Groups(['EducationalcredentialsDiploma:output', 'EducationalcredentialsDiploma:input'])]
     private $creator;
 
     /**
-     * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
-     *
      * @var string
      */
+    #[Groups(['EducationalcredentialsDiploma:output', 'EducationalcredentialsDiploma:input'])]
     private $validFrom;
 
     /**
-     * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
-     *
      * @var string
      */
+    #[Groups(['EducationalcredentialsDiploma:output', 'EducationalcredentialsDiploma:input'])]
     private $educationalAlignment;
 
     /**
-     * @Groups({"EducationalcredentialsDiploma:output", "EducationalcredentialsDiploma:input"})
-     *
      * @var ?string
      */
+    #[Groups(['EducationalcredentialsDiploma:output', 'EducationalcredentialsDiploma:input'])]
     private $text = '';
 
     public function getName(): string
